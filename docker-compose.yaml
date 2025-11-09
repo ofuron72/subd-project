@@ -11,3 +11,12 @@ services:
     ports:
       - "5432:5432"
 
+  university-db:
+    image: postgres:15.1-alpine
+    container_name: university-db
+    environment:
+      - POSTGRES_DB=university-db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5435:5432"
