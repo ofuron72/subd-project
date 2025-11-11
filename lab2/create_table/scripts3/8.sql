@@ -4,5 +4,5 @@
 
 select concat('Код-', u.univ_id, '; ',
               u.univ_name, '-г. ', upper(u.city),
-              '; Рейтинг=', round(u.rating, -2))
+              '; Рейтинг=', round(u.rating, -2)) as "сведения о вузе"
 from university u;
