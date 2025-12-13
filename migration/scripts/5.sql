@@ -1,19 +1,18 @@
 -- 1. вывести информацию о счете на котором происходит меньше всего операций
-select account_id,
-       client_id,
-       account_number,
-       account_type,
-       currency_id,
-       balance,
-       create_dttm,
-       modify_dttm
-from account as a
-where account_id in (select t.account_id
-                     from account ac
-                              join public.transaction t on ac.account_id = t.account_id
-                     group by t.account_id);
-
-select count(*), t.account_id from account ac join public.transaction t on ac.account_id = t.account_id
-group by t.account_id
-
+select
+    a.account_id as "Идентификатор счета",
+    a.account_number as "Номер счета",
+    a.account_type as "Тип счета",
+    a.balance as "Баланс",
+    count(t.transaction_id) as "число транзакций"
+from account a
+         left join transaction t
+                   on t.account_id = a.account_id
+group by
+    a.account_id,
+    a.account_number,
+    a.account_type,
+    a.balance
+order by count(t.transaction_id)
+limit 1;
 

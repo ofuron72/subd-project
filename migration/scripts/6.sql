@@ -1,17 +1,24 @@
 -- вывести информацию о клиенте у которого больше всего счетов и информацию об этих счетах
 
-select c.client_id,
-       c.full_name,
-       c.birth_date,
-       c.passport,
-       c.phone,
-       c.email,
-       c.create_dttm,
-       c.modify_dttm
-from client c where client_id = first_value(client_id) over (select count(*), a.client_id from client c
-         join public.account a on c.client_id = a.client_id
-group by a.client_id order by count(*) desc );
-
-select a.client_id, count(*) from client c
-                            join public.account a on c.client_id = a.client_id
-group by a.client_id
+with client_max_accounts as (
+    select
+        c.client_id,
+        c.full_name,
+        count(a.account_id) as account_count
+    from client c
+             join account a
+                  on a.client_id = c.client_id
+    group by c.client_id, c.full_name
+    order by account_count desc
+    limit 1
+)
+select
+    c.client_id as "Идентификатор клиента",
+    c.full_name as "Полное имя",
+    a.account_id as "Идентификатор счета" ,
+    a.account_number as "номер счета",
+    a.account_type as "Тип счета",
+    a.balance as "Баланс"
+from client_max_accounts c
+         join account a
+              on a.client_id = c.client_id;
