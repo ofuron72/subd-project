@@ -1,4 +1,4 @@
--- вывести информацию о клиенте у которого больше всего счетов и информацию об этих счетах
+-- 6. вывести информацию о клиенте у которого больше всего счетов и информацию об этих счетах
 
 with client_max_accounts as (
     select
@@ -10,7 +10,6 @@ with client_max_accounts as (
                   on a.client_id = c.client_id
     group by c.client_id, c.full_name
     order by account_count desc
-    limit 1
 )
 select
     c.client_id as "Идентификатор клиента",
@@ -21,4 +20,5 @@ select
     a.balance as "Баланс"
 from client_max_accounts c
          join account a
-              on a.client_id = c.client_id;
+              on a.client_id = c.client_id
+where c.account_count = (select max(account_count) from client_max_accounts);
