@@ -7,4 +7,4 @@ select
     s.subj_name as "наименование предмета",
     s.semester as "семестр",
     s.hour as "количество часов"
-from subject as s;
+from subject as s; 
