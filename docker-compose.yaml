@@ -20,3 +20,28 @@ services:
       - POSTGRES_PASSWORD=postgres
     ports:
       - "5435:5432"
+
+
+  postgres-db:
+    image: postgres:15.1-alpine
+    container_name: postgres-index-lab
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_DB: index_lab
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+
+    ports:
+      - "5436:5432"
+
+
+  local-db:
+    image: postgres:15.1-alpine
+    container_name: local-db
+    environment:
+      - POSTGRES_DB=local-db
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password123
+    ports:
+      - "5432:5432"

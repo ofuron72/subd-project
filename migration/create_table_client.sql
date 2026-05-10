@@ -79,3 +79,49 @@ create table transaction
 );
 
 comment on table transaction is 'Транзакции';
+
+create sequence transaction_audit_seq
+    start 1
+    increment 1;
+
+create table transaction_audit
+(
+    audit_id         bigint primary key default nextval('transaction_audit_seq'::regclass),
+
+    transaction_id   bigint          not null,
+    amount           decimal(15, 2) not null,
+    transaction_type varchar(20)    not null,
+
+    created_dttm     timestamptz default now() not null,
+
+    foreign key (transaction_id)
+        references transaction (transaction_id)
+);
+
+comment on table transaction_audit is 'Аудит финансовых транзакций';
+
+create sequence monthly_client_report_seq
+    start 1
+    increment 1;
+
+create table monthly_client_report
+(
+    id                 bigint primary key default nextval('monthly_client_report_seq'::regclass),
+
+    client_id          bigint           not null,
+
+    period_from        date             not null,
+    period_to          date             not null,
+
+    total_income       decimal(15, 2) default 0 not null,
+    total_expense      decimal(15, 2) default 0 not null,
+
+    transaction_count  bigint default 0 not null,
+
+    generated_at       timestamptz default now() not null,
+
+    foreign key (client_id)
+        references client (client_id)
+);
+
+comment on table monthly_client_report is 'Ежемесячные финансовые отчёты клиентов';
